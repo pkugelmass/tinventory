@@ -1,0 +1,16 @@
+body {
+  padding-top: 70px;
+}
+
+.navbar-inverse {
+  background-color: #006E81;
+}
+
+.fit-please {
+  padding-right:5px;
+}
+
+.navbar-brand {
+  font-family:courier;
+  font-size:200%;
+}

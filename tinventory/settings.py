@@ -25,7 +25,7 @@ SECRET_KEY = '&ar3u%0%-gm^6gpdici0pa&vk%*wsgyj#3%%3s^ewi$%4mgo3w'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['tinventory-pkugelmass.c9users.io']
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'transformations'
+    'transformations',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -121,3 +121,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+  os.path.join(BASE_DIR, 'static'),
+]
