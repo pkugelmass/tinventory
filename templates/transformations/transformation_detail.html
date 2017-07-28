@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %} 
+     {{ transformation.ministry.all|join:", " }} - {{transformation.title}}
+{% endblock %}
+
+{% block content %}
+
+     <div class="row">
+          <div class="col-md-12">
+                <h2>{{transformation.title}}
+                <small> ({{ transformation.ministry.all|join:", " }})</small></h2>
+          </div>
+     </div>
+     <div class="row">
+          <div class="col-md-8">
+               <h3>Details:</h3>
+               <table class="table table-striped align-middle">
+                    <tbody>
+                    <tr>
+                         <th>Category: </th>
+                         <td>{{ transformation.get_category_display }}</th>
+                    </tr>
+                    <tr>
+                         <th>Status: </th>
+                         <td>{{ transformation.status }}</td>
+                    </tr>
+                    <tr>
+                         <th>High-Level Description: </th>
+                         <td>{{ transformation.description }}</th>
+                    </tr>
+                    <tr>
+                         <th>What problem is it trying to solve? </th>
+                         <td>{{ transformation.problem }}</td>
+                    </tr>
+                                        <tr>
+                         <th>Which specific or other organizations are involved? </th>
+                         <td>{{ transformation.specific_orgs }}</th>
+                    </tr>
+                    <tr>
+                         <th>Primary Contact: </th>
+                         <td>{{ transformation.primary_contact }}</td>
+                    </tr>
+                    </tbody>
+               </table>
+          </div>
+          <div class="col-md-4"></div>
+     </div>
+
+    
+
+{% endblock %}

@@ -1,71 +1,34 @@
-{% load staticfiles %}
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="#">
+{% block title %}Transformation Inventory{% endblock %}
 
-    <title>Starter Template for Bootstrap</title>
+{% block content %}
 
-    
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{% static 'transformations/style.css' %}">
+     <h1>Ongoing Transformations</h1>
+     <div class="table-responsive">
+          <table class="table table-striped table-hover align-middle">
+               <tbody>
+               <tr>
+                    <th>Ministry</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Actions</th>
+               </tr>
+               {% for transformation in transformation_list %}
+               <tr>
+                    <td>{{ transformation.ministry.all|join:", " }}</td>
+                    <td>{{ transformation.title }}</td>
+                    <td>{{ transformation.get_category_display }}</td>
+                    <td>
+                         <div class="btn-group btn-group-sm">
+                              <a href="{% url 'transformation-detail' transformation.pk %}" class="btn btn-primary">View</a>
+                              <button type="button" class="btn btn-primary">Edit</button>
+                         </div>
+                    </td>
+               </tr>
+               {% endfor %}
+               </tbody>
+          </table>
+     </div>
 
-   </head>
-
-  <body>
-
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a href="#" class="navbar-left" height><img height=50px class="fit-please" src="{% static 'transformations/images/T_Hub_Logo.jpg' %}"></a>
-          <a class="navbar-brand" href="#">Transformation Inventory</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li class="active"><a href="#">Transformations</a></li>
-            <li><a href="#about">Files</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-
-    <div class="container">
-
-      <div class="starter-template">
-        <h1>Transformation Inventory</h1>
-        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
-        <ul>
-          {% for t in tlist %}
-            <li>{{t}}</li>
-          {% endfor %}
-        </ul>
-      </div>
-
-    </div>
-    
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <!--<script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>-->
-  </body>
-</html>
+{% endblock %}
