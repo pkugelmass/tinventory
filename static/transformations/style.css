@@ -33,3 +33,6 @@ text-shadow:    none;
 color:          white;                      
 text-shadow:    none;
 
+.container .page-header {
+  margin-top:0px;
+}
