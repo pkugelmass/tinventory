@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'transformations',
     'taggit',
     'crispy_forms',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE_CLASSES = [

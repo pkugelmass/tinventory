@@ -8,7 +8,9 @@
      {{transformation.title}}<small> ({{ transformation.ministry.all|join:", " }})</small>
      
      <div class="pull-right">
-          <a class="btn btn-default" href="#" data-toggle="tooltip" title="Edit"><span class="glyphicon glyphicon-pencil"></span></a>
+          <a class="btn btn-default" href="{% url 'transformation-edit' transformation.pk %}" data-toggle="tooltip" title="Edit">
+               <span class="glyphicon glyphicon-pencil"></span>
+          </a>
           <a class="btn btn-default" href="{% url 'transformation-delete' transformation.pk %}" data-toggle="tooltip" title="Delete">
                <span class="glyphicon glyphicon-trash"></span>
           </a>

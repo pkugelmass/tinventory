@@ -22,7 +22,7 @@
                     </form> <!-- end the first form here -->
                     
                     <form action="" method="GET"> <!-- second form to indicate the form should be cleared -->
-                         <button class="btn btn-default" value="Clear" type="submit">
+                         <button class="btn btn-basic" value="Clear" type="submit">
                          <span class="glyphicon glyphicon-sunglasses"></span> Clear</button>
                     </form>
                     
@@ -49,11 +49,29 @@
                     <td>
                          <a href="{% url 'transformation-detail' transformation.pk %}" class="">View</a> | 
                          <a href="{% url 'transformation-edit' transformation.pk %}" class="">Edit</a></td>
-
+                    <!--<td>-
+                         <div class="btn-group btn-group-sm">
+                              <a href="{% url 'transformation-detail' transformation.pk %}" class="btn btn-link">View</a>
+                              <a href="#" class="btn btn-link">Edit</a>
+                         </div>
+                    </td>-->
                </tr>
                {% endfor %}
                </tbody>
           </table>
+     </div>
+     
+     <div class="row">
+          <div class="panel panel-success">
+               <div class="panel-heading">
+                    Test Data
+               </div>
+               <div class="panel-body">
+                    <p>{{ request.GET }}</p>
+                    <p>{{ message }}</p>
+                    <p>{{ possible_set }}</p>
+               </div>
+          </div>
      </div>
 
 {% endblock %}
