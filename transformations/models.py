@@ -2,7 +2,27 @@ from django.db import models
 from taggit.managers import TaggableManager
 from django.core.urlresolvers import reverse
 
+class MinistryManager(models.Manager):
+     def choices_list(self):
+          return ( ( m , m.long() ) for m in self.get_queryset() )
+
+class Ministry(models.Model):
+     abbrev = models.CharField(max_length=6)
+     name = models.CharField(max_length=100)
+     
+     class Meta:
+          ordering = ['abbrev']
+     
+     def __str__(self):
+          return self.abbrev 
+          
+     def long(self):
+          return self.abbrev + ' - ' + self.name
+          
+     objects = MinistryManager()
+
 class Transformation(models.Model):
+     
      title = models.CharField("Transformation Title", max_length=100)
      ministry = models.ManyToManyField('Ministry')
      description = models.TextField("High-Level Description")
@@ -28,7 +48,7 @@ class Transformation(models.Model):
      
      category = models.CharField(max_length=20, choices=CATEGORIES, blank=True)
      status = models.CharField(max_length=20, choices=STATUSES, blank=True)
-     tags = TaggableManager()
+     tags = TaggableManager(blank=True)
      archived = models.BooleanField(default=False)
      
      def get_absolute_url(self):
@@ -36,13 +56,12 @@ class Transformation(models.Model):
           
      def __str__(self):
           return self.title
+          
+     def ministries_list(self):
+          return ', '.join(map(str, self.ministry.all()))
+          
 
-class Ministry(models.Model):
-     abbrev = models.CharField(max_length=6)
-     name = models.CharField(max_length=100)
-     
-     def __str__(self):
-          return self.abbrev
+
           
 class Resource(models.Model):
      transformation = models.ForeignKey('transformation')
