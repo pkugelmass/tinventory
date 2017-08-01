@@ -1,7 +1,7 @@
 from django.db import models
 from taggit.managers import TaggableManager
 from django.core.urlresolvers import reverse
-from datetime import datetime
+from datetime import timezone
 from autoslug import AutoSlugField
 from django.db.models.signals import pre_delete
 from django.dispatch.dispatcher import receiver
@@ -67,7 +67,7 @@ class Transformation(models.Model):
           return ', '.join(map(str, self.ministry.all()))
           
      def resources(self):
-          related_resources = self.attachment_set + self.link_set
+          related_resources = list(self.attachment_set.all()) + list(self.link_set.all())
           return sorted(related_resources, key=lambda r: r.date_modified, reverse=True)
           
 
@@ -79,17 +79,13 @@ class Resource(models.Model):
      title = models.CharField('Title', max_length=50, help_text="Give this resource a descriptive name.")
      description = models.TextField()
      tags = TaggableManager(blank=True)
-     date_modified = models.DateTimeField()
+     date_modified = models.DateTimeField(auto_now=True)
      
      class Meta:
           abstract = True
      
      def __str__(self):
           return self.title
-          
-     def save(self):
-        self.date_modified = datetime.now()
-        super(Resource, self).save()
         
           
 class Attachment(Resource):

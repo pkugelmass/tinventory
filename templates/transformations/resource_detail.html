@@ -41,7 +41,7 @@
                          <th class="col-md-2">{{object.type}}</th>
                          <td class="col-md-10">
                               {%if object.type = 'Link' %}
-                                   <a href="{{object.resource}}">{{object.resource.fieldfile}}</a>
+                                   <a href="{{object.resource}}">{{object.resource}}</a>
                               {% endif %}
                               {%if object.type = 'File' %}
                                    <a href="/media/{{ object.resource }}">{{object.filename}}</a>

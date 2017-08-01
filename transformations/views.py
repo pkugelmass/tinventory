@@ -91,9 +91,17 @@ class ViewFile(generic.DetailView):
      template_name = 'transformations/resource_detail.html'
 
 class DeleteLink(generic.edit.DeleteView):
+
+     def get_success_url(self):
+          # Assuming there is a ForeignKey from Comment to Post in your model
+          transformation = self.object.transformation
+          return reverse_lazy( 'transformation-detail', kwargs={'pk': transformation.pk})
+
      model = Link
      success_url = reverse_lazy('index')
      template_name = 'transformations/transformation_confirm_delete.html'
+     
+
      
 class DeleteFile(generic.edit.DeleteView):
      
