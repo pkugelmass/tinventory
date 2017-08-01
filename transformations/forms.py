@@ -1,10 +1,8 @@
 from django import forms
-from .models import Transformation, Ministry
+from .models import Ministry, Transformation, Attachment, Link
 from taggit.models import Tag 
 
-# Custom manager lets us create table/model-wide methods.
-def ListMinistries():
-     return ( ( m , m.long() ) for m in Ministry.objects.all() )
+# FORM HELPER STUFF ---------
 
 # Custom field class to add an empty choice at the top of the drop-down box.
 class ChoiceFieldEmpty(forms.ChoiceField):
@@ -12,6 +10,8 @@ class ChoiceFieldEmpty(forms.ChoiceField):
      def __init__(self,*args,**kwargs):
           super(ChoiceFieldEmpty,self).__init__(*args,**kwargs)
           self.choices = [('',' ')] + self.choices
+          
+# TRANSFORMATION FORMS ------------
 
 class TransformationFilterForm(forms.Form):
      
@@ -39,4 +39,16 @@ class TransformationForm(forms.ModelForm):
                #'tags':'Ctrl-click to select all that apply.'
                }
                
-     
+# RESOURCES FORMS ---------------
+
+class AttachmentForm(forms.ModelForm):
+     class Meta:
+          model = Attachment
+          fields = ['resource','title','description','transformation','tags']
+          widgets = {'description':forms.Textarea(attrs={'rows':3,'cols':40}),}
+          
+class LinkForm(forms.ModelForm):
+     class Meta:
+          model = Link
+          fields = ['resource','title','description','transformation','tags']
+          widgets = {'description':forms.Textarea(attrs={'rows':3,'cols':40}),}

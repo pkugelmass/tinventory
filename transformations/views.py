@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Transformation, Ministry
-from .forms import TransformationFilterForm, TransformationForm
+from .models import Transformation, Ministry, Attachment, Link
+from .forms import TransformationFilterForm, TransformationForm, LinkForm, AttachmentForm
 from django.views import generic
 from django import forms
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 
-# LIST VIEW
+# LIST/HOME VIEW
 
 def IndexView(request):
      
@@ -50,3 +50,58 @@ class EditTransformation(TransformationFormMixin, generic.edit.UpdateView):
 class DeleteTransformation(generic.edit.DeleteView):
      model = Transformation
      success_url = reverse_lazy('index')
+     
+# FILE MGMT VIEWS AND FORMS
+
+class ResourceFormMixin:
+     template_name='transformations/resource_form.html'
+     
+     def get_initial(self):
+          initial = super(generic.edit.CreateView, self).get_initial()
+          try:
+               initial['transformation'] = Transformation.objects.get(pk=self.kwargs['tID'])
+          except:
+               pass
+          return initial
+          
+class AddLink(ResourceFormMixin, generic.edit.CreateView):
+     model = Link
+     form_class = LinkForm
+     
+class AddFile(ResourceFormMixin, generic.edit.CreateView):
+     model = Attachment
+     form_class = AttachmentForm
+     
+class EditLink(generic.edit.UpdateView):
+     model = Link
+     form_class = LinkForm
+     template_name='transformations/resource_form.html'
+     
+class EditFile(generic.edit.UpdateView):
+     model = Attachment
+     form_class = AttachmentForm
+     template_name='transformations/resource_form.html'
+     
+class ViewLink(generic.DetailView):
+     model = Link
+     template_name = 'transformations/resource_detail.html'
+     
+class ViewFile(generic.DetailView):
+     model = Attachment
+     template_name = 'transformations/resource_detail.html'
+
+class DeleteLink(generic.edit.DeleteView):
+     model = Link
+     success_url = reverse_lazy('index')
+     template_name = 'transformations/transformation_confirm_delete.html'
+     
+class DeleteFile(generic.edit.DeleteView):
+     
+     def get_success_url(self):
+          # Assuming there is a ForeignKey from Comment to Post in your model
+          transformation = self.object.transformation
+          return reverse_lazy( 'transformation-detail', kwargs={'pk': transformation.pk})
+     
+     model = Attachment
+     # success_url = reverse_lazy('index')
+     template_name = 'transformations/transformation_confirm_delete.html'

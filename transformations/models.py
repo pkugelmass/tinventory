@@ -1,6 +1,11 @@
 from django.db import models
 from taggit.managers import TaggableManager
 from django.core.urlresolvers import reverse
+from datetime import datetime
+from autoslug import AutoSlugField
+from django.db.models.signals import pre_delete
+from django.dispatch.dispatcher import receiver
+import os
 
 class MinistryManager(models.Manager):
      def choices_list(self):
@@ -50,6 +55,7 @@ class Transformation(models.Model):
      status = models.CharField(max_length=20, choices=STATUSES, blank=True)
      tags = TaggableManager(blank=True)
      archived = models.BooleanField(default=False)
+     slug = AutoSlugField(populate_from='title')
      
      def get_absolute_url(self):
           return reverse('transformation-detail', kwargs={'pk':self.pk})
@@ -60,21 +66,58 @@ class Transformation(models.Model):
      def ministries_list(self):
           return ', '.join(map(str, self.ministry.all()))
           
+     def resources(self):
+          related_resources = self.attachment_set + self.link_set
+          return sorted(related_resources, key=lambda r: r.date_modified, reverse=True)
+          
 
-
+# RESOURCE/FILE MODELS
           
 class Resource(models.Model):
+
      transformation = models.ForeignKey('transformation')
-     title = models.CharField('Resource Title', max_length=50)
-     attachment = models.FileField()
-     link = models.URLField()
+     title = models.CharField('Title', max_length=50, help_text="Give this resource a descriptive name.")
      description = models.TextField()
-     tags = TaggableManager()
+     tags = TaggableManager(blank=True)
+     date_modified = models.DateTimeField()
+     
+     class Meta:
+          abstract = True
      
      def __str__(self):
           return self.title
           
-     def clean(self):
-        super(Resource, self).clean()
-        if self.attachment is None and self.link is None:
-            raise ValidationError('The resource must include either an attachment or a link.')
+     def save(self):
+        self.date_modified = datetime.now()
+        super(Resource, self).save()
+        
+          
+class Attachment(Resource):
+
+     def get_upload_path(instance, filename):
+          return os.path.join('transformations', str(instance.transformation.slug), filename)
+     
+     resource = models.FileField("Attachment",upload_to=get_upload_path)
+     
+     def get_absolute_url(self):
+        return reverse('view-file', kwargs={'pk': self.pk})
+        
+     @property
+     def filename(self):
+          return os.path.basename(self.resource.name)
+        
+     @property
+     def type(self):
+          return 'File'
+          
+     # HB Deleting doesn't actually delete the file.
+
+class Link(Resource):
+     resource = models.URLField("Link")
+     
+     def get_absolute_url(self):
+        return reverse('view-link', kwargs={'pk': self.pk})
+        
+     @property
+     def type(self):
+          return 'Link'
