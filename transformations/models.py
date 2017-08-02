@@ -1,10 +1,7 @@
 from django.db import models
 from taggit.managers import TaggableManager
 from django.core.urlresolvers import reverse
-from datetime import timezone
 from autoslug import AutoSlugField
-from django.db.models.signals import pre_delete
-from django.dispatch.dispatcher import receiver
 import os
 
 class MinistryManager(models.Manager):
